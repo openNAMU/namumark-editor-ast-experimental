@@ -47,7 +47,10 @@ jobs:
         run: pnpm install
       
       - name: Build WASM
-        run: pnpm --filter @namumark/wasm run build:c
+        run: pnpm --filter @namumark/wasm run build
+      
+      - name: Build Editor
+        run: pnpm --filter @namumark/editor run build
       
       - name: Build Demo
         run: pnpm --filter @namumark/demo run build
