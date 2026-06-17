@@ -1,0 +1,19 @@
+{
+  "name": "namumark-editor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AST-based NamuMark syntax-highlighting editor library powered by a WASM build of the namumark C parser",
+  "type": "module",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build:wasm": "pnpm --filter @namumark/wasm run build",
+    "build:editor": "pnpm --filter @namumark/editor run build",
+    "build": "pnpm run build:wasm && pnpm run build:editor",
+    "dev": "pnpm --filter @namumark/demo run dev",
+    "typecheck": "pnpm -r run typecheck",
+    "clean": "pnpm -r run clean"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

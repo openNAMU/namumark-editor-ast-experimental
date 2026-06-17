@@ -1,0 +1,308 @@
+/*
+ * Demo styles — light theme, dependency-free (no CSS framework).
+ *
+ * Layout is a fixed appbar over a two-column split that fills the viewport.
+ * The editor library is themed entirely through its public CSS variables on
+ * `.nm-editor`, so the dark default is overridden to a light palette here
+ * without touching the library.
+ */
+
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f7f8fa;
+  --bg-panel: #fbfbfc;
+  --border: #e3e6ea;
+  --border-strong: #d4d8de;
+  --fg: #1f2328;
+  --fg-muted: #656d76;
+  --accent: #2563eb;
+  --accent-weak: #e8f0fe;
+
+  --appbar-height: 52px;
+  --pane-title-height: 38px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------------------------------------------------------------- App bar */
+
+.appbar {
+  flex: 0 0 var(--appbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 18px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.appbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.appbar-logo {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.appbar-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.appbar-title {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--fg);
+}
+
+.appbar-tagline {
+  font-size: 12px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appbar-actions {
+  flex: 0 0 auto;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-subtle);
+  color: var(--fg-muted);
+}
+.status-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-badge.is-loading {
+  color: #b45309;
+}
+.status-badge.is-ready {
+  color: #15803d;
+  background: #ecfdf3;
+  border-color: #bbf7d0;
+}
+.status-badge.is-error {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* Hide the tagline on narrow screens to avoid crowding the appbar. */
+@media (max-width: 640px) {
+  .appbar-tagline {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- Layout */
+
+.layout {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Critical: allow the 1fr tracks to shrink below content width so the
+     monospace editor / AST <pre> never force the page to scroll sideways. */
+  min-width: 0;
+  min-height: 0;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  /* Same as above, but per-track: lets each pane clip its own overflow. */
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border);
+}
+.pane:last-child {
+  border-right: 0;
+}
+
+/* Both pane titles share one fixed height so their bottom borders align. */
+.pane-title {
+  flex: 0 0 var(--pane-title-height);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.pane-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* --------------------------------------------------------------- Tabs */
+
+.pane-tabs {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.pane-tab {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.pane-tab:hover {
+  background: var(--bg-subtle);
+  color: var(--fg);
+}
+.pane-tab.active {
+  color: var(--accent);
+  background: var(--accent-weak);
+  border-color: #c7dafd;
+}
+
+/* --------------------------------------------------------------- Editor */
+
+.editor-host {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Re-theme the editor library to a light palette via its public variables. */
+.editor-host .nm-editor {
+  height: 100%;
+
+  --nm-bg: #ffffff;
+  --nm-fg: #1f2328;
+  --nm-selection: rgba(37, 99, 235, 0.18);
+
+  --nm-delimiter: #adb1b8;
+  --nm-heading: #0550ae;
+  --nm-bold: #8250df;
+  --nm-italic: #953800;
+  --nm-underline: #0a7d6b;
+  --nm-strike: #8c959f;
+  --nm-link: #0969da;
+  --nm-macro: #6639ba;
+  --nm-comment: #6e7781;
+  --nm-table: #b35900;
+  --nm-wiki: #1a7f37;
+  --nm-list: #0550ae;
+  --nm-quote: #1a7f37;
+  --nm-hr: #adb1b8;
+  --nm-category: #8250df;
+}
+
+/* --------------------------------------------------------------- Preview */
+
+.preview {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px 18px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.preview.ast {
+  margin: 0;
+  background: var(--bg-subtle);
+  color: #3a3f45;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+/* namumark HTML output styling inside the preview. */
+.preview .namumark {
+  max-width: 100%;
+  word-wrap: break-word;
+}
+.preview .namumark h1,
+.preview .namumark h2,
+.preview .namumark h3 {
+  margin-top: 0.8em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3em;
+}
+.preview .namumark a {
+  color: var(--accent);
+}
+.preview .namumark table {
+  border-collapse: collapse;
+}
+.preview .namumark td,
+.preview .namumark th {
+  border: 1px solid var(--border-strong);
+  padding: 6px 10px;
+}
+.preview .namumark blockquote {
+  margin: 0.6em 0;
+  padding: 0.2em 0.9em;
+  border-left: 3px solid var(--border-strong);
+  color: var(--fg-muted);
+}
+
+.is-hidden {
+  display: none !important;
+}

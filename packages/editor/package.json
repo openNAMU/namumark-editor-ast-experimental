@@ -1,0 +1,31 @@
+{
+  "name": "@namumark/editor",
+  "version": "0.1.0",
+  "description": "AST-aware NamuMark syntax-highlighting editor. Monaco-style hidden-textarea input with a custom DOM rendering core, backed by a WASM build of the namumark C parser.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./src/style.css"
+  },
+  "files": [
+    "dist",
+    "src/style.css"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@namumark/wasm": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

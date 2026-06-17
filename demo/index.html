@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NamuMark Editor · Demo</title>
+  </head>
+  <body>
+    <header class="appbar">
+      <div class="appbar-brand">
+        <span class="appbar-titles">
+          <strong class="appbar-title">namumark Editor</strong>
+          <span class="appbar-tagline">
+            Uses <a href="https://github.com/shapelayer/namumark">namumark</a> as a syntax processing engine.
+          </span>
+        </span>
+      </div>
+      <div class="appbar-actions">
+        <span id="status" class="status-badge is-loading">loading...</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="pane">
+        <div class="pane-title">
+          <span class="pane-label">Editor</span>
+        </div>
+        <div id="editor" class="editor-host"></div>
+      </section>
+
+      <section class="pane">
+        <div class="pane-title">
+          <span class="pane-label">Preview</span>
+          <div class="pane-tabs" role="tablist">
+            <button type="button" data-tab="html" class="pane-tab active">
+              HTML
+            </button>
+            <button type="button" data-tab="ast" class="pane-tab">
+              AST JSON
+            </button>
+          </div>
+        </div>
+        <div id="preview-html" class="preview"></div>
+        <pre id="preview-ast" class="preview ast is-hidden"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

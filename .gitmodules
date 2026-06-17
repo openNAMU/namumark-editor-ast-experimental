@@ -1,0 +1,4 @@
+[submodule "vendor/namumark"]
+	path = vendor/namumark
+	url = https://github.com/ShapeLayer/namumark.git
+	branch = release/prepare-0.1.1
