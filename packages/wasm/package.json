@@ -1,0 +1,30 @@
+{
+  "name": "@namumark/wasm",
+  "version": "0.1.0",
+  "description": "Emscripten/WASM build of the namumark C parser with a TypeScript loader",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./namumark.mjs": "./dist/namumark.mjs",
+    "./namumark.wasm": "./dist/namumark.wasm"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build:c": "bash scripts/build.sh",
+    "build:ts": "tsc -p tsconfig.json",
+    "build": "pnpm run build:c && pnpm run build:ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist build"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

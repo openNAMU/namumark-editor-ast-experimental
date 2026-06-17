@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# build artifacts
+dist/
+*.tsbuildinfo
+
+# emscripten / wasm build output
+packages/wasm/build/
+packages/wasm/dist/
+
+# logs / env / editor
+*.log
+.DS_Store
+.env
+.idea/
+.vscode/

@@ -1,0 +1,228 @@
+/*
+ * @namumark/editor default theme.
+ *
+ * The editor renders text itself (no contenteditable), so all coloring is done
+ * by class. Each token <span> gets `nm-tok` plus `nm-tok-<type>`.
+ *
+ * Customize by overriding the CSS variables on `.nm-editor`, or by targeting
+ * the token classes directly.
+ */
+.nm-editor {
+  --nm-bg: #1e1e1e;
+  --nm-fg: #d4d4d4;
+  --nm-font: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --nm-font-size: 14px;
+  --nm-line-height: 19px;
+  --nm-selection: rgba(38, 79, 120, 0.7);
+
+  --nm-delimiter: #808080;
+  --nm-heading: #569cd6;
+  --nm-bold: #d7ba7d;
+  --nm-italic: #c586c0;
+  --nm-underline: #4ec9b0;
+  --nm-strike: #777777;
+  --nm-link: #4fc1ff;
+  --nm-macro: #dcdcaa;
+  --nm-comment: #6a9955;
+  --nm-table: #ce9178;
+  --nm-wiki: #b5cea8;
+  --nm-list: #9cdcfe;
+  --nm-quote: #608b4e;
+  --nm-hr: #808080;
+  --nm-category: #c586c0;
+
+  position: relative;
+  background: var(--nm-bg);
+  color: var(--nm-fg);
+  font-family: var(--nm-font);
+  font-size: var(--nm-font-size);
+  line-height: var(--nm-line-height);
+  overflow: auto;
+  cursor: text;
+  /* Stable monospace metrics: disabling ligatures and kerning keeps every
+     glyph at a fixed advance width, so the computed caret/selection geometry
+     (column * charWidth) matches the painted text on every line. */
+  font-variant-ligatures: none;
+  font-kerning: none;
+  letter-spacing: 0;
+  tab-size: 4;
+}
+
+/* Token runs must not alter horizontal advance, or the caret would drift on
+   styled lines. They share the editor font and metrics; only color and
+   decoration differ. (Bold/italic are kept because monospace faces advance
+   identically; ligatures/kerning stay disabled via inheritance.) */
+.nm-tok {
+  font-family: inherit;
+  letter-spacing: inherit;
+  white-space: pre;
+}
+
+.nm-scroll {
+  position: relative;
+  min-height: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* Shared coordinate origin for text + all overlays. Everything inside is
+   positioned from this box's top-left, so `(column-1) * charWidth` aligns the
+   caret/selection with the rendered text without any padding compensation. */
+.nm-content {
+  position: relative;
+  width: 100%;
+}
+
+.nm-lines {
+  position: relative;
+  white-space: pre;
+  /* Text sits above the selection rectangles. */
+  z-index: 1;
+}
+
+.nm-line {
+  height: var(--nm-line-height);
+  white-space: pre;
+}
+
+/* Selection highlight layer: absolutely-positioned rectangles drawn beneath
+   the text, sharing the .nm-content origin. The editor renders its own
+   selection because it does not use the browser's native selection on the
+   custom DOM. */
+.nm-selection-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.nm-selection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--nm-selection);
+  border-radius: 1px;
+}
+
+/* Hidden real input surface: focusable but visually gone. */
+.nm-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: var(--nm-line-height);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  white-space: pre;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font: inherit;
+  z-index: 1;
+}
+
+/* Fake caret, positioned via transform; blinks on its own. */
+.nm-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  background: var(--nm-fg);
+  pointer-events: none;
+  animation: nm-blink 1s step-end infinite;
+  z-index: 2;
+}
+
+@keyframes nm-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --- Token colors --- */
+.nm-tok-text {
+  color: var(--nm-fg);
+}
+.nm-tok-delimiter {
+  color: var(--nm-delimiter);
+}
+.nm-tok-heading {
+  color: var(--nm-heading);
+  font-weight: 700;
+}
+.nm-tok-bold {
+  color: var(--nm-bold);
+  font-weight: 700;
+}
+.nm-tok-italic {
+  color: var(--nm-italic);
+  font-style: italic;
+}
+.nm-tok-underline {
+  color: var(--nm-underline);
+  text-decoration: underline;
+}
+.nm-tok-strikethrough {
+  color: var(--nm-strike);
+  text-decoration: line-through;
+}
+.nm-tok-superscript,
+.nm-tok-subscript {
+  color: var(--nm-underline);
+}
+.nm-tok-link {
+  color: var(--nm-link);
+  text-decoration: underline;
+}
+.nm-tok-image,
+.nm-tok-video {
+  color: var(--nm-link);
+}
+.nm-tok-macro {
+  color: var(--nm-macro);
+}
+.nm-tok-comment {
+  color: var(--nm-comment);
+  font-style: italic;
+}
+.nm-tok-redirect {
+  color: var(--nm-macro);
+}
+.nm-tok-category {
+  color: var(--nm-category);
+}
+.nm-tok-list-item {
+  color: var(--nm-list);
+}
+.nm-tok-blockquote {
+  color: var(--nm-quote);
+}
+.nm-tok-horizontal-rule {
+  color: var(--nm-hr);
+}
+.nm-tok-table {
+  color: var(--nm-table);
+}
+.nm-tok-wiki-block {
+  color: var(--nm-wiki);
+}
+.nm-tok-preformatted {
+  color: var(--nm-wiki);
+}
+.nm-tok-footnote {
+  color: var(--nm-macro);
+}
+.nm-tok-advanced {
+  color: var(--nm-wiki);
+}

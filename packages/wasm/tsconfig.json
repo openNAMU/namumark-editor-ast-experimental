@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowJs": false,
+    // The emitted .mjs lives in dist/ and is imported by src/index.ts; allow
+    // resolving it during typecheck via the ambient module declaration.
+    "noEmitOnError": false
+  },
+  "include": ["src/**/*.ts"]
+}
